@@ -1,8 +1,12 @@
 package com.mywebapp.apicontroller;
 
 import com.mywebapp.model.ProxyIp;
+import com.mywebapp.redis.JedisDao;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
+
 
 /**
  * Created by gaorui on 17/1/11.
@@ -11,14 +15,34 @@ import org.springframework.web.bind.annotation.*;
 @EnableAutoConfiguration
 public class UserController {
 
-    @RequestMapping(value = "/users/{username}", method = RequestMethod.GET)
-    public ProxyIp getUser(@PathVariable String username) {
-        ProxyIp proxyIp = new ProxyIp();
-        proxyIp.setIp(username);
-        proxyIp.setPort(8080);
+    @RequestMapping(value = "/proxyIpApi/{token}", method = RequestMethod.GET)
+    public ProxyIp getUser(@PathVariable String token) {
 
+        ProxyIp proxyIp = new ProxyIp();
+
+        proxyIp.setList(JedisDao.getProxyIp());
         return proxyIp;
     }
 
+    @RequestMapping(value = "/login/", method = RequestMethod.POST)
+    public Map<String,Object> login(@RequestParam String userName, @RequestParam String userPwd) {
+
+
+        return null;
+    }
+
+    @RequestMapping(value = "/register/", method = RequestMethod.POST)
+    public Map<String,Object> register(@RequestParam String userName, @RequestParam String userPwd,@RequestParam String userEmail) {
+
+
+        return null;
+    }
+
+    @RequestMapping(value = "/emaiCheck/", method = RequestMethod.GET)
+    public Map<String,Object> emaiCheck(@RequestParam String token) {
+
+
+        return null;
+    }
 
 }

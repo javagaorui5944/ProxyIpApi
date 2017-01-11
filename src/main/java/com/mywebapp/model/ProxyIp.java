@@ -1,25 +1,20 @@
 package com.mywebapp.model;
 
+import java.util.List;
+
 /**
  * Created by gaorui on 17/1/11.
  */
 public class ProxyIp {
-    private String Ip;
-    private int port;
 
-    public String getIp() {
-        return Ip;
+    private List<String> list;
+
+
+    public List<String> getList() {
+        return list;
     }
 
-    public void setIp(String ip) {
-        Ip = ip;
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
+    public void setList(List<String> list) {
+        this.list = list;
     }
 }
