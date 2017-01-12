@@ -26,4 +26,9 @@ public class JedisDao {
         }
         return list;
     }
+
+    public int get(){
+
+        return 1;
+    }
 }
