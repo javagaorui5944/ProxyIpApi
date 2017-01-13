@@ -3,9 +3,11 @@ package com.mywebapp.apicontroller;
 import com.mywebapp.model.ProxyIp;
 import com.mywebapp.redis.JedisDao;
 import com.mywebapp.service.UserService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,9 +20,9 @@ public class UserController {
     @Autowired
     UserService userService;
 
-
-    @RequestMapping(value = "/proxyIpApi/{token}", method = RequestMethod.GET)
-    public ProxyIp getUser(@PathVariable String token) {
+    @ApiOperation(value="获取爬虫", notes="")
+    @RequestMapping(value = "/proxyIpApi/", method = RequestMethod.GET)
+    public ProxyIp getUser() {
 
         ProxyIp proxyIp = new ProxyIp();
 
@@ -28,10 +30,12 @@ public class UserController {
         return proxyIp;
     }
 
+    @ApiOperation(value="登陆", notes="")
     @RequestMapping(value = "/login/", method = RequestMethod.POST)
     public Map<String, Object> login(@RequestParam String userName, @RequestParam String userPwd) {
-
-        return null;
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put(userName,userPwd);
+        return map;
     }
 
     @RequestMapping(value = "/register/", method = RequestMethod.POST)
@@ -48,6 +52,7 @@ public class UserController {
         return null;
     }
 
+    @ApiOperation(value="获取users", notes="")
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     public List<Map<String,Object>> users() {
 

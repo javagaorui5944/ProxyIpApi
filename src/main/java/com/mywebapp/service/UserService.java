@@ -9,7 +9,6 @@ import java.util.Map;
 /**
  * Created by gaorui on 17/1/11.
  */
-@Service
 public interface UserService {
     public List<Map<String,Object>> user();
 }
