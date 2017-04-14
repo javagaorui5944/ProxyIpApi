@@ -20,6 +20,11 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    /**
+     * author:javaGr_ais
+     * @deprecated 获取爬虫api
+     * @return
+     */
     @ApiOperation(value="获取爬虫", notes="")
     @RequestMapping(value = "/proxyIpApi/", method = RequestMethod.GET)
     public ProxyIp getUser() {
@@ -30,6 +35,13 @@ public class UserController {
         return proxyIp;
     }
 
+    /**
+     * @author javaGr_ais
+     * @param userName
+     * @param userPwd
+     * @deprecated 登陆api
+     * @return
+     */
     @ApiOperation(value="登陆", notes="")
     @RequestMapping(value = "/login/", method = RequestMethod.POST)
     public Map<String, Object> login(@RequestParam String userName, @RequestParam String userPwd) {
@@ -38,6 +50,14 @@ public class UserController {
         return map;
     }
 
+    /**
+     * author:javaGr_ais
+     * @param userEmail
+     * @param userPwd
+     * @param userName
+     * @deprecated 获取爬虫api
+     * @return
+     */
     @RequestMapping(value = "/register/", method = RequestMethod.POST)
     public Map<String, Object> register(@RequestParam String userName, @RequestParam String userPwd, @RequestParam String userEmail) {
 

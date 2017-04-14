@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+    <title></title>
+
+    <style type="text/css">
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="map"></div>
+<canvas id="canvas"></canvas>
+
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=1XjLLEhZhQNUzd93EjU5nOGQ"></script>
+<script src="http://mapv.baidu.com/build/mapv.min.js"></script>
+
+<script type="text/javascript" onload="">
+
+
+    // 百度地图API功能
+    var map = new BMap.Map("map", {
+        enableMapClick: false
+    }); // 创建Map实例
+    map.centerAndZoom(new BMap.Point(105.403119, 38.028658), 5); // 初始化地图,设置中心点坐标和地图级别
+    map.enableScrollWheelZoom(true); // 开启鼠标滚轮缩放
+
+    map.setMapStyle({
+        style: 'midnight'
+    });
+
+    var randomCount = 30;
+
+
+
+
+</script>
+<script language=javascript>
+    var int=self.setInterval("clock()",1000*15)
+    function clock()
+    {
+        map.clearOverlays();
+    }
+</script>
+<script>
+    function view(result) {
+
+        //alert(result);
+        var data = [];
+
+        //var citys = ["北京"];
+
+        // 构造数据
+
+
+
+        //mapvLayer = mapv.baiduMapLayer(map, null, options);
+        //mapv.remove(mapvLayer);
+
+        var cityCenter = mapv.utilCityCenter.getCenterByCityName("自贡");
+        data.push({
+            geometry: {
+                type: 'Point',
+                coordinates: [cityCenter.lng - 2 + Math.random() * 4, cityCenter.lat - 2 + Math.random() * 4]
+            },
+            text:(Math.random() * 10).toFixed(2)+result,
+            count: 30 * Math.random(),
+            time: 100 * Math.random()
+        });
+
+        var dataSet = new mapv.DataSet(data);
+
+        var options = {
+            draw: 'text',
+            font: '18px Arial',
+            fillStyle: 'yellow',
+            shadowColor: 'yellow',
+            shadowBlur: 10
+
+        }
+
+        var mapvLayer = new mapv.baiduMapLayer(map, dataSet, options);
+
+    }
+    </script>
+
+
+
+<script type="text/javascript">
+    var websocket = null;
+
+    //判断当前浏览器是否支持WebSocket
+    if('WebSocket' in window){
+        websocket = new WebSocket("ws://localhost:8080/hello");
+    }
+    else{
+        alert('Not support websocket')
+    }
+
+    //连接发生错误的回调方法
+    websocket.onerror = function(){
+       // setMessageInnerHTML("error");
+    };
+
+    //连接成功建立的回调方法
+    websocket.onopen = function(event){
+        //alert("ssss")
+        setMessageInnerHTML("open");
+    }
+
+    //接收到消息的回调方法
+    websocket.onmessage = function(event){
+        //alert("ssss");
+        view(event.data);
+    }
+
+    //连接关闭的回调方法
+    websocket.onclose = function(){
+        //setMessageInnerHTML("close");
+    }
+
+    //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+    window.onbeforeunload = function(){
+        websocket.close();
+    }
+
+    //将消息显示在网页上
+   /* function setMessageInnerHTML(innerHTML){
+        document.getElementById('message').innerHTML += innerHTML + '<br/>';
+    }*/
+
+    //关闭连接
+    function closeWebSocket(){
+        websocket.close();
+    }
+
+    //发送消息
+    function send(){
+        var message = "sadsadas";
+        websocket.send(message);
+    }
+</script>
+</body>
+
+</html>
