@@ -52,7 +52,7 @@
 
 </script>
 <script language=javascript>
-    var int=self.setInterval("clock()",1000*15)
+    var int=self.setInterval("clock()",1000*10)
     function clock()
     {
         map.clearOverlays();
@@ -63,7 +63,11 @@
 
         //alert(result);
         var data = [];
+        var view = result.split('@')[0];
+        var lat = result.split('@')[1].split('$')[0];
+        var lng = result.split('@')[1].split('$')[1];
 
+        //console.log(area);
         //var citys = ["北京"];
 
         // 构造数据
@@ -73,13 +77,19 @@
         //mapvLayer = mapv.baiduMapLayer(map, null, options);
         //mapv.remove(mapvLayer);
 
-        var cityCenter = mapv.utilCityCenter.getCenterByCityName("自贡");
+        //var cityCenter = mapv.utilCityCenter.getCenterByCityName(area);
+       /* if(cityCenter == null){
+            return;
+        }*/
         data.push({
             geometry: {
                 type: 'Point',
-                coordinates: [cityCenter.lng - 2 + Math.random() * 4, cityCenter.lat - 2 + Math.random() * 4]
+
+                coordinates: [lng - 2 + Math.random() * 4, lat - 2 + Math.random() * 4]
+
+               // coordinates: [37.0569,31.8122]
             },
-            text:(Math.random() * 10).toFixed(2)+result,
+            text:view,
             count: 30 * Math.random(),
             time: 100 * Math.random()
         });

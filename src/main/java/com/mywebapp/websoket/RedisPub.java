@@ -44,7 +44,13 @@ public class RedisPub {
                 @Override
                 public void onMessage(String channel, String msg) {
                     System.out.println("收到频道 : 【" + channel +" 】的消息 ：" + msg);
-                     HelloWorldEndpoint.hello("hello,world!!",null);
+                    try {
+                        Thread.sleep(1000 * 5);
+                        HelloWorldEndpoint.hello(msg,null);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
                 }
             };
             jedis.subscribe(jedisPubSub, new String[]{"channel1"});
