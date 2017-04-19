@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,22 @@ import java.util.Map;
 public class UserController {
     @Autowired
     UserService userService;
+
+
+    /**
+     * author:javaGr_ais
+     * @deprecated 获取爬虫api
+     * @return
+     */
+    @ApiOperation(value="获取Ip", notes="")
+    @RequestMapping(value = "/getIp/", method = RequestMethod.GET)
+    public Map<String,String> getIp(HttpServletRequest request) {
+
+        String ip = request.getRemoteAddr();
+        Map<String,String> map = new HashMap<String,String>();
+        map.put("ip",ip);
+        return map;
+    }
 
     /**
      * author:javaGr_ais
@@ -35,6 +52,20 @@ public class UserController {
         return proxyIp;
     }
 
+    /**
+     * author:javaGr_ais
+     * @deprecated 获取爬虫api
+     * @return
+     */
+    @ApiOperation(value="获取爬虫", notes="")
+    @RequestMapping(value = "/allProxyIpApi/", method = RequestMethod.GET)
+    public ProxyIp getAllUser() {
+
+        ProxyIp proxyIp = new ProxyIp();
+
+        proxyIp.setList(JedisDao.getAllProxyIp());
+        return proxyIp;
+    }
     /**
      * @author javaGr_ais
      * @param userName
