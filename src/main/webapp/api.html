@@ -1,0 +1,177 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Ais代理</title>
+</head>
+<!-- Bootstrap核心CSS文件 -->
+<link rel="stylesheet" href="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap.min.css">
+<!-- 可选的Bootstrap主题文件(一般不用引入) -->
+<link rel="stylesheet" href="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap-theme.min.css">
+<!-- jQuery文件，在bootstrap.min.js之前引入 -->
+<script src="http://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
+<!-- Bootstrap核心JavaScript文件 -->
+<script src="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" href="/isagalaev-highlight.js-56849b8/src/styles/default.css">
+<script src="/isagalaev-highlight.js-56849b8/src/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<body onload="node()">
+<script>
+    function node() {
+
+        // var commentValue = JSON.stringify(strJSON);
+
+        var xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                //var dataJson  = eval("("+data+")");
+                var data = xhr.responseText;
+                data = eval("(" + data + ")");
+                console.log(data);
+                var res = data.code;
+                if(res != 1){
+
+                    alert("请先登陆");
+                    window.location.href='index.html';
+                }
+
+                    var oTest1, newNode1 = "";
+                    oTest1 = document.getElementById("tagcloud");
+                    oTest1.innerHTML = "";
+                    newNode1 += "<dt>用户名:</dt><dd>"+data.data.login+"</dd>"
+                    +"<dd><img alt='140x140' width='100' height='100' src='"+data.data.avatar_url+"' class=img-polaroid'/></dd>"
+                    +"<dt>昵称:</dt><dd>"+data.data.name+"</dd>"
+                    +"<dt>邮箱:</dt><dd>"+data.data.email+"</dd>"
+                    +"<dt>key:</dt><dd>3F2504E0-4F89-11D3-9A0C-0305E82C3301</dd>"
+                    +"<dt>加入时间:</dt><dd>"+data.data.created_at+"</dd>"
+                            oTest1.innerHTML = newNode1;
+
+
+            }
+        };
+
+        xhr.open('GET', 'user_info');
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send();
+    }
+</script>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+            <ul class="breadcrumb">
+                <li>
+                    <a href="/">主页</a> <span class="divider"></span>
+                </li>
+                <li>
+                    <a href="JavaScript:0;">Api</a> <span class="divider"></span>
+                </li>
+                <li class="active">
+
+                    <a href="https://github.com/javagaorui5944/ProxyIpPool" target="_Blank">项目源码</a> <span
+                        class="divider"></span>
+                </li>
+            </ul>
+            <blockquote>
+                <p>
+                    Ais代理是一个全球化的代理平台.
+                </p>
+                <small>关键词 <cite>开源,代理,爬虫</cite></small>
+            </blockquote>
+
+            <dl id="tagcloud" class="dl-horizontal">
+
+               <!-- <dt>
+                    Vacheron Constantin
+                </dt>
+                <dd>
+                    始创于1775年的江诗丹顿已有250年历史，
+                </dd>
+                <dd>
+                    是世界上历史最悠久、延续时间最长的名表之一。
+                </dd>
+                <dt>
+                    IWC
+                </dt>
+                <dd>
+                    创立于1868年的万国表有“机械表专家”之称。
+                </dd>
+                <dt>
+                    Cartier
+                </dt>
+                <dd>
+                    卡地亚拥有150多年历史，是法国珠宝金银首饰的制造名家。
+                </dd>-->
+            </dl>
+            <div class="hero-unit">
+                <h1>
+                    Api文档,http restful服务
+                </h1>
+                <code>
+
+                </code>
+
+            </div>
+            <pre><code class="java">class Api {
+     public static void main(String args[]) {
+
+        String user = "javagaorui5944";//用户名
+        String key = "3F2504E0-4F89-11D3-9A0C-0305E82C3301";//系统分配的key
+        String str = sendGet("http://127.0.0.1:8080/proxyIpApi/user=" + user + "?key=" + key);
+        System.out.println(str);
+        /**
+         *str 输出结果,json格式
+         {"list":["HTTP @ /61.152.81.193:9100","HTTP @ /52.53.99.220:80","HTTP @ /121.8.98.201:8080","HTTP @ /193.107.247.118:53281","HTTP @ /36.68.90.108:8080","HTTP @ /190.205.186.198:3128","HTTP @ /5.160.3.147:8080","HTTP @ /45.123.3.105:8080","HTTP @ /37.14.112.205:8089","HTTP @ /197.242.168.194:3128"]}
+         *
+         */
+    }
+
+    public static String sendGet(String req_url) {
+        StringBuffer buffer = new StringBuffer();
+        try {
+            URL url = new URL(req_url);
+            HttpURLConnection httpUrlConn = (HttpURLConnection) url.openConnection();
+
+            httpUrlConn.setDoOutput(false);
+            httpUrlConn.setDoInput(true);
+            httpUrlConn.setUseCaches(false);
+
+            httpUrlConn.setRequestMethod("GET");
+            httpUrlConn.connect();
+
+            // 将返回的输入流转换成字符串
+            InputStream inputStream = httpUrlConn.getInputStream();
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "utf-8");
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+            String str = null;
+            while ((str = bufferedReader.readLine()) != null) {
+                buffer.append(str);
+            }
+            //res = new String(buffer.toString().getBytes("iso-8859-1"),"utf-8");
+            bufferedReader.close();
+            inputStreamReader.close();
+            // 释放资源
+            inputStream.close();
+            inputStream = null;
+            httpUrlConn.disconnect();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return buffer.toString();
+    }
+}
+            </code></pre>
+<!--
+            <div id="tagcloud"></div>
+-->
+
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>

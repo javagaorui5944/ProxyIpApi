@@ -1,171 +1,261 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
-
 <head>
-
-    <meta charset="UTF-8">
-    <title></title>
-
-    <style type="text/css">
-        html,
-        body {
-            width: 100%;
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-        }
-
-        #map {
-            width: 100%;
-            height: 100%;
-        }
-    </style>
+    <title>Ais代理</title>
 </head>
-
-<body>
-
-<div id="map"></div>
-<canvas id="canvas"></canvas>
-
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=1XjLLEhZhQNUzd93EjU5nOGQ"></script>
-<script src="http://mapv.baidu.com/build/mapv.min.js"></script>
-
-<script type="text/javascript" onload="">
-
-
-    // 百度地图API功能
-    var map = new BMap.Map("map", {
-        enableMapClick: false
-    }); // 创建Map实例
-    map.centerAndZoom(new BMap.Point(105.403119, 38.028658), 5); // 初始化地图,设置中心点坐标和地图级别
-    map.enableScrollWheelZoom(true); // 开启鼠标滚轮缩放
-
-    map.setMapStyle({
-        style: 'midnight'
-    });
-
-    var randomCount = 30;
-
-
-
-
-</script>
-<script language=javascript>
-    var int=self.setInterval("clock()",1000*10)
-    function clock()
-    {
-        map.clearOverlays();
-    }
-</script>
+<!-- Bootstrap核心CSS文件 -->
+<link rel="stylesheet" href="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap.min.css">
+<!-- 可选的Bootstrap主题文件(一般不用引入) -->
+<link rel="stylesheet" href="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap-theme.min.css">
+<!-- jQuery文件，在bootstrap.min.js之前引入 -->
+<script src="http://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
+<!-- Bootstrap核心JavaScript文件 -->
+<script src="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
+<body onload="github()">
 <script>
-    function view(result) {
-
-        //alert(result);
-        var data = [];
-        var view = result.split('@')[0];
-        var lat = result.split('@')[1].split('$')[0];
-        var lng = result.split('@')[1].split('$')[1];
-
-        //console.log(area);
-        //var citys = ["北京"];
-
-        // 构造数据
-
-
-
-        //mapvLayer = mapv.baiduMapLayer(map, null, options);
-        //mapv.remove(mapvLayer);
-
-        //var cityCenter = mapv.utilCityCenter.getCenterByCityName(area);
-       /* if(cityCenter == null){
-            return;
-        }*/
-        data.push({
-            geometry: {
-                type: 'Point',
-
-                coordinates: [lng - 2 + Math.random() * 4, lat - 2 + Math.random() * 4]
-
-               // coordinates: [37.0569,31.8122]
-            },
-            text:view,
-            count: 30 * Math.random(),
-            time: 100 * Math.random()
-        });
-
-        var dataSet = new mapv.DataSet(data);
-
-        var options = {
-            draw: 'text',
-            font: '18px Arial',
-            fillStyle: 'yellow',
-            shadowColor: 'yellow',
-            shadowBlur: 10
-
-        }
-
-        var mapvLayer = new mapv.baiduMapLayer(map, dataSet, options);
-
+    function js_method() {
+        alert("请先登陆");
     }
-    </script>
+    function github() {
 
+        // var commentValue = JSON.stringify(strJSON);
 
+        var xhr = new XMLHttpRequest();
 
-<script type="text/javascript">
-    var websocket = null;
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                //var dataJson  = eval("("+data+")");
+                var data = xhr.responseText;
+                data = eval("(" + data + ")");
+                console.log(data);
+                var res = data.code;
+                if (res == 0) {
+                    var oTest1, newNode1 = "";
+                    oTest1 = document.getElementById("github");
+                    oTest1.innerHTML = '';
 
-    //判断当前浏览器是否支持WebSocket
-    if('WebSocket' in window){
-        websocket = new WebSocket("ws://localhost:8080/hello");
-    }
-    else{
-        alert('Not support websocket')
-    }
+                    newNode1 += " <a class='btn btn-warning btn-large btn-block' href='https://github.com/login/oauth/authorize?client_id=75e7694cd70a8fe807a9&state=xxx&redirect_uri=http://127.0.0.1:8080/RegisteredByGithub'>Github登陆获取稳定api</a>"
+                            oTest1.innerHTML = newNode1;
+                }
+                else {
+                    var oTest1, newNode1 = "";
+                    oTest1 = document.getElementById("github");
+                    oTest1.innerHTML = null;
 
-    //连接发生错误的回调方法
-    websocket.onerror = function(){
-       // setMessageInnerHTML("error");
-    };
+                    newNode1 += " <button class='btn btn-large btn-warning btn-block disabled' type='button' href=''>欢迎,"+data.data.login+"</button>"
+                    oTest1.innerHTML = newNode1;
 
-    //连接成功建立的回调方法
-    websocket.onopen = function(event){
-        //alert("ssss")
-        setMessageInnerHTML("open");
-    }
+                }
 
-    //接收到消息的回调方法
-    websocket.onmessage = function(event){
-        //alert("ssss");
-        view(event.data);
-    }
+            }
+        };
 
-    //连接关闭的回调方法
-    websocket.onclose = function(){
-        //setMessageInnerHTML("close");
-    }
-
-    //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
-    window.onbeforeunload = function(){
-        websocket.close();
-    }
-
-    //将消息显示在网页上
-   /* function setMessageInnerHTML(innerHTML){
-        document.getElementById('message').innerHTML += innerHTML + '<br/>';
-    }*/
-
-    //关闭连接
-    function closeWebSocket(){
-        websocket.close();
-    }
-
-    //发送消息
-    function send(){
-        var message = "sadsadas";
-        websocket.send(message);
+        xhr.open('GET', 'user_info');
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send();
     }
 </script>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+            <ul class="breadcrumb">
+                <li>
+                    <a href="JavaScript:0;">主页</a> <span class="divider"></span>
+                </li>
+                <li>
+                    <!--
+                                        <a href="JavaScript:js_method();">Api</a> <span class="divider"></span>
+                    -->
+                    <a href="api.html">Api</a> <span class="divider"></span>
+                </li>
+                <li class="active">
+
+                    <a href="https://github.com/javagaorui5944/ProxyIpPool" target="_Blank">项目源码</a> <span
+                        class="divider"></span>
+                </li>
+            </ul>
+            <blockquote>
+                <p>
+                    Ais代理是一个全球化的代理平台.
+                </p>
+                <small>关键词 <cite>开源,代理,爬虫</cite></small>
+            </blockquote>
+
+            <div id="github"></div>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>
+                        编号
+                    </th>
+                    <th>
+                        产品
+                    </th>
+                    <th>
+                        交付时间
+                    </th>
+                    <th>
+                        状态
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        TB - Monthly
+                    </td>
+                    <td>
+                        01/04/2012
+                    </td>
+                    <td>
+                        Default
+                    </td>
+                </tr>
+                <tr class="success">
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        TB - Monthly
+                    </td>
+                    <td>
+                        01/04/2012
+                    </td>
+                    <td>
+                        Approved
+                    </td>
+                </tr>
+                <tr class="error">
+                    <td>
+                        2
+                    </td>
+                    <td>
+                        TB - Monthly
+                    </td>
+                    <td>
+                        02/04/2012
+                    </td>
+                    <td>
+                        Declined
+                    </td>
+                </tr>
+                <tr class="warning">
+                    <td>
+                        3
+                    </td>
+                    <td>
+                        TB - Monthly
+                    </td>
+                    <td>
+                        03/04/2012
+                    </td>
+                    <td>
+                        Pending
+                    </td>
+                </tr>
+                <tr class="info">
+                    <td>
+                        4
+                    </td>
+                    <td>
+                        TB - Monthly
+                    </td>
+                    <td>
+                        04/04/2012
+                    </td>
+                    <td>
+                        Call in to confirm
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        TB - Monthly
+                    </td>
+                    <td>
+                        01/04/2012
+                    </td>
+                    <td>
+                        Default
+                    </td>
+                </tr>
+                <tr class="success">
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        TB - Monthly
+                    </td>
+                    <td>
+                        01/04/2012
+                    </td>
+                    <td>
+                        Approved
+                    </td>
+                </tr>
+                <tr class="error">
+                    <td>
+                        2
+                    </td>
+                    <td>
+                        TB - Monthly
+                    </td>
+                    <td>
+                        02/04/2012
+                    </td>
+                    <td>
+                        Declined
+                    </td>
+                </tr>
+                <tr class="warning">
+                    <td>
+                        3
+                    </td>
+                    <td>
+                        TB - Monthly
+                    </td>
+                    <td>
+                        03/04/2012
+                    </td>
+                    <td>
+                        Pending
+                    </td>
+                </tr>
+                <tr class="info">
+                    <td>
+                        4
+                    </td>
+                    <td>
+                        TB - Monthly
+                    </td>
+                    <td>
+                        04/04/2012
+                    </td>
+                    <td>
+                        Call in to confirm
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <h3 class="text-center text-success">
+                ProxyIp-View-Map
+            </h3>
+
+            <div class="carousel slide" id="carousel-135019">
+                <iframe src="map.html" height="500" width="1450">
+
+                </iframe>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 </body>
 
 </html>
