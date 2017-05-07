@@ -73,7 +73,7 @@ public class UserController {
 
         User check  = userService.check(user,key);
         if(check != null)
-            return CommonUtil.constructResponse(1,"Api",JedisDao.getProxyIp(10));
+            return CommonUtil.constructResponse(1,"Api success",JedisDao.getProxyIp(10));
         else
             return CommonUtil.constructResponse(0,"Permission denied",null);
     }

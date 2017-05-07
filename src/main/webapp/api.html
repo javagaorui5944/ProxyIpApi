@@ -106,11 +106,36 @@
             </dl>
             <div class="hero-unit">
                 <h1>
-                    Api文档,http restful服务
+                    Api文档,http restful服务,返回结果Json格式
                 </h1>
-                <code>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>
+                            成功返回结果
+                        </th>
+                        <th>
+                            {"msg":"Api success","code":1,"data":["HTTP @ /5.2.69.147:1080","HTTP @ /125.209.110.187:80","HTTP @ /178.215.163.191:3128","HTTP @ /5.9.21.245:3128","HTTP @ /83.169.202.2:3128","HTTP @ /186.46.57.90:8080","HTTP @ /141.196.71.149:8080","HTTP @ /138.68.137.158:3128","HTTP @ /123.30.238.16:3128","HTTP @ /95.188.74.174:8081"]}
+                        </th>
 
-                </code>
+                    </tr>
+                    <tr>
+                        <th>
+                            失败返回结果
+                        </th>
+                        <th>
+                            {"msg":"Permission denied","code":0,"data":null}
+                        </th>
+
+                    </tr>
+                    </thead>
+                    <tbody id="tbody">
+
+
+
+
+                    </tbody>
+                </table>
 
             </div>
             <pre><code class="java">class Api {
@@ -118,13 +143,8 @@
 
         String user = "javagaorui5944";//用户名
         String key = "3F2504E0-4F89-11D3-9A0C-0305E82C3301";//系统分配的key
-        String str = sendGet("http://127.0.0.1:8080/proxyIpApi/user=" + user + "?key=" + key);
-        System.out.println(str);
-        /**
-         *str 输出结果,json格式
-         {"list":["HTTP @ /61.152.81.193:9100","HTTP @ /52.53.99.220:80","HTTP @ /121.8.98.201:8080","HTTP @ /193.107.247.118:53281","HTTP @ /36.68.90.108:8080","HTTP @ /190.205.186.198:3128","HTTP @ /5.160.3.147:8080","HTTP @ /45.123.3.105:8080","HTTP @ /37.14.112.205:8089","HTTP @ /197.242.168.194:3128"]}
-         *
-         */
+        String str = sendGet("http://127.0.0.1:8080/proxyIpApi/" + user + "?key=" + key);
+
     }
 
     public static String sendGet(String req_url) {
