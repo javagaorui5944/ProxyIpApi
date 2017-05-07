@@ -10,7 +10,6 @@ public class ProxyIp {
 
     private Set<String> list;
 
-
     public Set<String> getList() {
         return list;
     }

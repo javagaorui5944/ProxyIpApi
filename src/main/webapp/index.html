@@ -11,10 +11,40 @@
 <script src="http://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
 <!-- Bootstrap核心JavaScript文件 -->
 <script src="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
-<body onload="github()">
+<body onload="github(),js_method()">
 <script>
     function js_method() {
-        alert("请先登陆");
+        var xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                //var dataJson  = eval("("+data+")");
+                var data = xhr.responseText;
+                data = eval("(" + data + ")");
+                console.log(data);
+                var oTest1, newNode1 = "";
+                oTest1 = document.getElementById("tbody");
+                oTest1.innerHTML = '';
+
+                var res = data.code;
+                    for(var i = 0 ; i< data.data.length;i++){
+                        var proxyip = data.data[i];
+                        var ip = proxyip.split("/")[1].split(":")[0];
+                        var port = proxyip.split("/")[1].split(":")[1];
+                        newNode1 +=" <tr> <td>"+i+" </td> <td>"+ip+" </td> <td>"+port+" </td> </tr>"
+
+                    }
+
+                    oTest1.innerHTML = newNode1;
+
+
+
+            }
+        };
+
+        xhr.open('GET', 'proxyIpApi/');
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send();
     }
     function github() {
 
@@ -27,7 +57,7 @@
                 //var dataJson  = eval("("+data+")");
                 var data = xhr.responseText;
                 data = eval("(" + data + ")");
-                console.log(data);
+                //console.log(data);
                 var res = data.code;
                 if (res == 0) {
                     var oTest1, newNode1 = "";
@@ -82,6 +112,10 @@
             </blockquote>
 
             <div id="github"></div>
+            <blockquote>
+
+                <small> <cite> 免费代理ip,每30分钟更新一次</cite></small>
+            </blockquote>
             <table class="table table-bordered">
                 <thead>
                 <tr>
@@ -89,157 +123,18 @@
                         编号
                     </th>
                     <th>
-                        产品
+                        IP地址
                     </th>
                     <th>
-                        交付时间
-                    </th>
-                    <th>
-                        状态
+                        端口
                     </th>
                 </tr>
                 </thead>
-                <tbody>
-                <tr>
-                    <td>
-                        1
-                    </td>
-                    <td>
-                        TB - Monthly
-                    </td>
-                    <td>
-                        01/04/2012
-                    </td>
-                    <td>
-                        Default
-                    </td>
-                </tr>
-                <tr class="success">
-                    <td>
-                        1
-                    </td>
-                    <td>
-                        TB - Monthly
-                    </td>
-                    <td>
-                        01/04/2012
-                    </td>
-                    <td>
-                        Approved
-                    </td>
-                </tr>
-                <tr class="error">
-                    <td>
-                        2
-                    </td>
-                    <td>
-                        TB - Monthly
-                    </td>
-                    <td>
-                        02/04/2012
-                    </td>
-                    <td>
-                        Declined
-                    </td>
-                </tr>
-                <tr class="warning">
-                    <td>
-                        3
-                    </td>
-                    <td>
-                        TB - Monthly
-                    </td>
-                    <td>
-                        03/04/2012
-                    </td>
-                    <td>
-                        Pending
-                    </td>
-                </tr>
-                <tr class="info">
-                    <td>
-                        4
-                    </td>
-                    <td>
-                        TB - Monthly
-                    </td>
-                    <td>
-                        04/04/2012
-                    </td>
-                    <td>
-                        Call in to confirm
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        1
-                    </td>
-                    <td>
-                        TB - Monthly
-                    </td>
-                    <td>
-                        01/04/2012
-                    </td>
-                    <td>
-                        Default
-                    </td>
-                </tr>
-                <tr class="success">
-                    <td>
-                        1
-                    </td>
-                    <td>
-                        TB - Monthly
-                    </td>
-                    <td>
-                        01/04/2012
-                    </td>
-                    <td>
-                        Approved
-                    </td>
-                </tr>
-                <tr class="error">
-                    <td>
-                        2
-                    </td>
-                    <td>
-                        TB - Monthly
-                    </td>
-                    <td>
-                        02/04/2012
-                    </td>
-                    <td>
-                        Declined
-                    </td>
-                </tr>
-                <tr class="warning">
-                    <td>
-                        3
-                    </td>
-                    <td>
-                        TB - Monthly
-                    </td>
-                    <td>
-                        03/04/2012
-                    </td>
-                    <td>
-                        Pending
-                    </td>
-                </tr>
-                <tr class="info">
-                    <td>
-                        4
-                    </td>
-                    <td>
-                        TB - Monthly
-                    </td>
-                    <td>
-                        04/04/2012
-                    </td>
-                    <td>
-                        Call in to confirm
-                    </td>
-                </tr>
+                <tbody id="tbody">
+
+
+
+
                 </tbody>
             </table>
             <h3 class="text-center text-success">

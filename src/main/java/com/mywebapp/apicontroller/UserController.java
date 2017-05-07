@@ -2,6 +2,7 @@ package com.mywebapp.apicontroller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.mywebapp.bean.User;
 import com.mywebapp.model.ProxyIp;
 import com.mywebapp.redis.JedisDao;
 import com.mywebapp.service.UserService;
@@ -10,13 +11,13 @@ import com.mywebapp.util.ParamUtil;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.spring.web.json.Json;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 
 /**
@@ -26,7 +27,7 @@ import java.util.Map;
 public class UserController {
     @Autowired
     UserService userService;
-
+    public static ProxyIp proxyIp = new ProxyIp() ;
 
     /**
      * author:javaGr_ais
@@ -44,6 +45,22 @@ public class UserController {
         return map;
     }
 
+
+    /**
+     * author:javaGr_ais
+     *
+     * @return
+     * @deprecated 首页获取爬虫api
+     */
+    @ApiOperation(value = "获取Ip", notes = "")
+    @RequestMapping(value = "/proxyIpApi/", method = RequestMethod.GET)
+    public JSONObject proxyIpApi(HttpServletRequest request) {
+
+
+
+        return CommonUtil.constructResponse(1, "获取爬虫api", proxyIp.getList());
+    }
+
     /**
      * author:javaGr_ais
      *
@@ -52,14 +69,13 @@ public class UserController {
      */
     @ApiOperation(value = "获取爬虫", notes = "")
     @RequestMapping(value = "/proxyIpApi/{user}", method = RequestMethod.GET)
-    public ProxyIp getUser(@PathVariable("user")String user,String key) {
+    public JSONObject proxyIpApi(@PathVariable("user") String user, String key) {
 
-        System.out.println(user+key);
-
-        ProxyIp proxyIp = new ProxyIp();
-
-        proxyIp.setList(JedisDao.getProxyIp());
-        return proxyIp;
+        User check  = userService.check(user,key);
+        if(check != null)
+            return CommonUtil.constructResponse(1,"Api",JedisDao.getProxyIp(10));
+        else
+            return CommonUtil.constructResponse(0,"Permission denied",null);
     }
 
     /**
@@ -70,7 +86,7 @@ public class UserController {
      */
     @ApiOperation(value = "获取爬虫", notes = "")
     @RequestMapping(value = "/allProxyIpApi/", method = RequestMethod.GET)
-    public ProxyIp getAllUser() {
+    public ProxyIp allProxyIpApi() {
 
         ProxyIp proxyIp = new ProxyIp();
 
@@ -130,7 +146,7 @@ public class UserController {
 
 
         JSONObject user = (JSONObject) session.getAttribute("user");
-        if(user != null){
+        if (user != null) {
 
             return CommonUtil.constructResponse(1, "user_info", user);
         }
@@ -157,9 +173,23 @@ public class UserController {
             JSONObject user = (JSONObject) JSON.parse(res);
 
             if (user.getString("login") != null) {
+                User user_info = userService.getUserByLogin(user.getString("login"));
+                if (user_info != null) {
+                    user.put("u_key", user_info.getU_key());
+                    session.setAttribute("user", user);
+                    response.sendRedirect("http://127.0.0.1:8080/api.html");
+                } else {
+                    String u_key = CommonUtil.GUID();
+                    int insertRes = userService.insertUser(user.getString("login"), user.getString("email"), u_key, user.getString("name"), user.getString("created_at"), user.getString("avatar_url"));
+                    if (insertRes > 0) {
+                        user.put("u_key", u_key);
+                        session.setAttribute("user", user);
+                        response.sendRedirect("http://127.0.0.1:8080/api.html");
+                    } else {
 
-                session.setAttribute("user", user);
-                response.sendRedirect("http://127.0.0.1:8080/api.html");
+                        return CommonUtil.constructResponse(0, "登陆失败", null);
+                    }
+                }
             }
 
             return null;
