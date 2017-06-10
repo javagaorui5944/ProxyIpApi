@@ -42,5 +42,53 @@ public class UserServiceImp implements UserService {
         return userMapper.check(login,u_key);
     }
 
+    @Override
+    public List<User> getAllUsers() {
+
+        return userMapper.getAllUsers();
+    }
+
+    @Override
+    public int userCount(String u_name) {
+
+        return userMapper.userCount(u_name);
+    }
+
+    @Override
+    public int addUserCount(String u_name) {
+
+        return userMapper.addUserCount(u_name);
+    }
+
+    @Override
+    public int bannedUser(String u_name) {
+
+        return userMapper.bannedUser(u_name);
+    }
+
+    @Override
+    public int restoreUser(String u_name) {
+
+        return userMapper.restoreUser(u_name);
+    }
+
+    @Override
+    public int getUserCount(String u_name) {
+
+        return userMapper.getUserCount(u_name);
+    }
+
+    @Override
+    public int getUserStatus(String u_name) {
+
+        return userMapper.getUserStatus(u_name);
+    }
+
+    @Override
+    public int updateInfo(String u_name, String u_nickname, String u_email) {
+
+        return userMapper.updateInfo(u_name,u_nickname,u_email);
+    }
+
 
 }

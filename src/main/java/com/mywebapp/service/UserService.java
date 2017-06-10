@@ -16,4 +16,13 @@ public interface UserService {
     User getUserByLogin(String login);
     int insertUser(String u_name,String u_email, String u_key,String u_nickname,String u_created_at, String u_avatar_url);
     User check(String login,String u_key);
+    List<User> getAllUsers();
+    int userCount(String u_name);
+    int addUserCount(String u_name);
+    int bannedUser(String u_name);
+    int restoreUser(String u_name);
+    int getUserCount(String u_name);
+    int getUserStatus(String u_name);
+    int updateInfo(String u_name,String u_nickname,String u_email);
+
 }

@@ -1,0 +1,170 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Ais代理</title>
+</head>
+<!-- Bootstrap核心CSS文件 -->
+<link rel="stylesheet" href="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap.min.css">
+<!-- 可选的Bootstrap主题文件(一般不用引入) -->
+<link rel="stylesheet" href="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap-theme.min.css">
+<!-- jQuery文件，在bootstrap.min.js之前引入 -->
+<script src="http://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
+<!-- Bootstrap核心JavaScript文件 -->
+<script src="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" href="/isagalaev-highlight.js-56849b8/src/styles/default.css">
+<link href="http://cdn.bootcss.com/bootstrap-table/1.9.1/bootstrap-table.min.css" rel="stylesheet"/>
+
+<script src="http://cdn.bootcss.com/bootstrap-table/1.9.1/bootstrap-table.min.js"></script>
+<script src="http://cdn.bootcss.com/bootstrap-table/1.9.1/locale/bootstrap-table-zh-CN.min.js"></script>
+<script src="/isagalaev-highlight.js-56849b8/src/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<body onload="node()">
+<script>
+    function node() {
+
+        // var commentValue = JSON.stringify(strJSON);
+
+        var xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                //var dataJson  = eval("("+data+")");
+                var data = xhr.responseText;
+                data = eval("(" + data + ")");
+                console.log(data);
+                var res = data.code;
+                if (res != 1) {
+
+                    alert("请先登陆");
+                    window.location.href = 'index.html';
+                }
+
+                var oTest1, newNode1 = "";
+                oTest1 = document.getElementById("tagcloud");
+
+
+            }
+        };
+
+        xhr.open('POST', "managerlogin/");
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send();
+    }
+
+
+</script>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+            <ul class="breadcrumb">
+                <li>
+                    <a href="/">主页</a> <span class="divider"></span>
+                </li>
+                <li>
+                    <a href="api.html">Api</a> <span class="divider"></span>
+                </li>
+                <li class="active">
+
+                    <a href="manager.html">后台管理</a> <span
+                        class="divider"></span>
+                </li>
+                <li>
+                    <a href="JavaScript:0;">代理管理</a> <span class="divider"></span>
+                </li>
+                <li class="active">
+
+                    <a href="https://github.com/javagaorui5944/ProxyIpPool" target="_Blank">项目源码</a> <span
+                        class="divider"></span>
+                </li>
+            </ul>
+            <blockquote>
+                <p>
+                    Ais代理是一个全球化的代理平台.
+                </p>
+                <small>关键词 <cite>开源,代理,爬虫</cite></small>
+            </blockquote>
+
+
+        </div>
+    </div>
+</div>
+<table id="goods" data-query-params="queryParams" data-pagination="true">
+    <thead>
+    <tr>
+        <th data-field="checkbox" data-checkbox="true"></th>
+        <th data-field="code">序号</th>
+        <th data-field="ip">IP</th>
+        <th data-field="port">端口</th>
+        <th data-field="delete">删除操作</th>
+    </tr>
+    </thead>
+</table>
+<script>
+    /*数据json*/
+    //var json =  [{"Code":"1","TuanGouName":"好多鱼","StartDate":"2016/10/9 10:15:00","EndTime":"2016/12/25 11:30:00"}];
+
+    /*初始化table数据*/
+    $(function () {
+        $("#goods").bootstrapTable({
+            url: 'http://127.0.0.1:8080/allProxyIpApi/'
+            //data:json
+        });
+
+    });
+    /*获取选中行对象*/
+    function getContent() {
+
+    }
+
+    function deleteProxyIp(proxyip) {
+        var porxy = $('#' + proxyip + '').html();
+
+        // var commentValue = JSON.stringify(strJSON);
+        var parm = "porxy=" + porxy;
+        var xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                //var dataJson  = eval("("+data+")");
+                var data = xhr.responseText;
+                data = eval("(" + data + ")");
+                console.log(data);
+                var res = data.code;
+                if (res > 0) {
+
+                    alert("ok");
+                    projectQuery();
+
+                }
+                else {
+                    alert("error");
+
+
+                }
+
+
+            }
+        };
+
+        xhr.open('POST', "deleteProxyIp/");
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.send(parm);
+    }
+
+    function projectQuery() {
+        $('#goods').bootstrapTable(
+                "refresh",
+                {
+                    url: 'http://127.0.0.1:8080/allProxyIpApi/'
+                }
+        );
+    }
+
+
+</script>
+
+</body>
+
+</html>

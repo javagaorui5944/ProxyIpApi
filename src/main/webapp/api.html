@@ -31,22 +31,28 @@
                 data = eval("(" + data + ")");
                 console.log(data);
                 var res = data.code;
-                if(res != 1){
+                if (res != 1) {
 
                     alert("请先登陆");
-                    window.location.href='index.html';
+                    window.location.href = '/';
+                }
+                else if (data.data.u_status == 0) {
+                    alert("您的帐号被冻结,如何疑问请联系cquptgr@gmail.com!");
+                    window.location.href = '/';
                 }
 
-                    var oTest1, newNode1 = "";
-                    oTest1 = document.getElementById("tagcloud");
-                    oTest1.innerHTML = "";
-                    newNode1 += "<dt>用户名:</dt><dd>"+data.data.login+"</dd>"
-                    +"<dd><img alt='140x140' width='100' height='100' src='"+data.data.avatar_url+"' class=img-polaroid'/></dd>"
-                    +"<dt>昵称:</dt><dd>"+data.data.name+"</dd>"
-                    +"<dt>邮箱:</dt><dd>"+data.data.email+"</dd>"
-                    +"<dt>key:</dt><dd>"+data.data.u_key+"</dd>"
-                    +"<dt>加入时间:</dt><dd>"+data.data.created_at+"</dd>"
-                            oTest1.innerHTML = newNode1;
+                var oTest1, newNode1 = "";
+                oTest1 = document.getElementById("tagcloud");
+                oTest1.innerHTML = "";
+                newNode1 += "<dt>用户名:</dt><dd>" + data.data.login + "</dd>"
+                        + "<dd><img alt='140x140' width='100' height='100' src='" + data.data.avatar_url + "' class=img-polaroid'/></dd>"
+                        + "<dt >昵称:</dt><dd id='nickname'>" + data.data.name + "</dd>"
+                        + "<dt  value='" + data.data.email + "'>邮箱:</dt><dd id='email'>" + data.data.email + "</dd>"
+                        + "<dt>key:</dt><dd>" + data.data.u_key + "</dd>"
+                        + "<dt>加入时间:</dt><dd>" + data.data.created_at + "</dd>"
+                        + "<dt>剩余使用次数:</dt><dd>" + data.data.u_count + "</dd>"
+                        + "<dd> <button class='bbtn btn-large btn-warning' type='button' data-toggle='modal' data-target='#myModal2' data-whatever=''>修改个人资料</button></dd>"
+                oTest1.innerHTML = newNode1;
 
 
             }
@@ -57,6 +63,43 @@
         xhr.send();
     }
 </script>
+<script>
+    function updateInfo() {
+
+        var parm = "nickname=" + document.getElementById("inputname").value
+                + "&email=" + document.getElementById("inputemail").value;
+        //
+        // var commentValue = JSON.stringify(strJSON);
+        var xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                //var dataJson  = eval("("+data+")");
+                var data = xhr.responseText;
+                data = eval("(" + data + ")");
+                console.log(data);
+                var res = data.code;
+
+                if (res == 1) {
+
+                    alert("修改成功");
+                    node();
+                    return;
+                }
+                else {
+                    alert("修改失败");
+                    return;
+                }
+
+            }
+        };
+
+        xhr.open('POST', 'updateInfo');
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.send(parm);
+    }
+</script>
+
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span12">
@@ -66,6 +109,14 @@
                 </li>
                 <li>
                     <a href="JavaScript:0;">Api</a> <span class="divider"></span>
+                </li>
+                <li>
+
+                    <a href="manager.html">后台管理</a> <span
+                        class="divider"></span>
+                </li>
+                <li>
+                    <a href="allproxyip.html">代理管理</a> <span class="divider"></span>
                 </li>
                 <li class="active">
 
@@ -80,34 +131,58 @@
                 <small>关键词 <cite>开源,代理,爬虫</cite></small>
             </blockquote>
 
-            <dl id="tagcloud" class="dl-horizontal">
+            <div id="tagcloud" class="dl-horizontal" style="float: left">
 
-               <!-- <dt>
-                    Vacheron Constantin
-                </dt>
-                <dd>
-                    始创于1775年的江诗丹顿已有250年历史，
-                </dd>
-                <dd>
-                    是世界上历史最悠久、延续时间最长的名表之一。
-                </dd>
-                <dt>
-                    IWC
-                </dt>
-                <dd>
-                    创立于1868年的万国表有“机械表专家”之称。
-                </dd>
-                <dt>
-                    Cartier
-                </dt>
-                <dd>
-                    卡地亚拥有150多年历史，是法国珠宝金银首饰的制造名家。
-                </dd>-->
-            </dl>
+                <!-- <dt>
+                     Vacheron Constantin
+                 </dt>
+                 <dd>
+                     始创于1775年的江诗丹顿已有250年历史，
+                 </dd>
+                 <dd>
+                     是世界上历史最悠久、延续时间最长的名表之一。
+                 </dd>
+                 <dt>
+                     IWC
+                 </dt>
+                 <dd>
+                     创立于1868年的万国表有“机械表专家”之称。
+                 </dd>
+                 <dt>
+                     Cartier
+                 </dt>
+                 <dd>
+                     卡地亚拥有150多年历史，是法国珠宝金银首饰的制造名家。
+                 </dd>-->
+
+            </div>
+
+            <div style=float:center >
+            <form>
+                <fieldset>
+                    <legend>自动化爬虫</legend>
+                    <label>种子URL</label>
+                    <input id="url" type="text" />
+                    <span class="help-block">请填写目标站点.</span>
+                    <label>标记特点</label>
+                    <input id="format" type="text" />
+                    <span class="help-block">抓取内容,如png,jpg,doc等</span>
+
+                    <a onclick="crawler();" class="btn">提交</a>
+                    <div id="alert">
+
+                    </div>
+                </fieldset>
+            </form>
+            </div>
+
+
             <div class="hero-unit">
+                <div>
                 <h1>
                     Api文档,http restful服务,返回结果Json格式
                 </h1>
+                    </div>
                 <table class="table table-bordered">
                     <thead>
                     <tr>
@@ -115,7 +190,10 @@
                             成功返回结果
                         </th>
                         <th>
-                            {"msg":"Api success","code":1,"data":["HTTP @ /5.2.69.147:1080","HTTP @ /125.209.110.187:80","HTTP @ /178.215.163.191:3128","HTTP @ /5.9.21.245:3128","HTTP @ /83.169.202.2:3128","HTTP @ /186.46.57.90:8080","HTTP @ /141.196.71.149:8080","HTTP @ /138.68.137.158:3128","HTTP @ /123.30.238.16:3128","HTTP @ /95.188.74.174:8081"]}
+                            {"msg":"Api success","code":1,"data":["HTTP @ /5.2.69.147:1080","HTTP @
+                            /125.209.110.187:80","HTTP @ /178.215.163.191:3128","HTTP @ /5.9.21.245:3128","HTTP @
+                            /83.169.202.2:3128","HTTP @ /186.46.57.90:8080","HTTP @ /141.196.71.149:8080","HTTP @
+                            /138.68.137.158:3128","HTTP @ /123.30.238.16:3128","HTTP @ /95.188.74.174:8081"]}
                         </th>
 
                     </tr>
@@ -128,10 +206,17 @@
                         </th>
 
                     </tr>
+                    <tr>
+                        <th>
+                            免费次数已使用完
+                        </th>
+                        <th>
+                            {"msg": "您的免费Api次数已使用完","code": -1,"data": null}
+                        </th>
+
+                    </tr>
                     </thead>
                     <tbody id="tbody">
-
-
 
 
                     </tbody>
@@ -184,14 +269,140 @@
     }
 }
             </code></pre>
-<!--
-            <div id="tagcloud"></div>
--->
+            <!--
+                        <div id="tagcloud"></div>
+            -->
 
         </div>
     </div>
 </div>
+<!--start modal2-->
+<div class="modal fade bs-example-modal-sm" id="myModal2" role="dialog" aria-label="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">注册信息</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label class="control-label">昵称：</label>
+                        <input id="inputname" type="text" class="form-control" name="username">
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">邮箱：</label>
+                        <input id="inputemail" type="text" class="form-control" name="email">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    关闭
+                </button>
+                <button onclick="updateInfo()" type="button" data-dismiss="modal" class="btn btn-primary">
+                    保存
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
+<script>
+    //    $("#myModal").modal("show");
+    //    $("#myModal").modal({
+    //        keyboard:true
+    //    });
+    //    $("#myModal").modal({
+    //        backdrop:false
+    //    });
+    $("#myModal2").on("show.bs.modal", function (e) {
+        var button = $(e.relatedTarget);
+        var recipient = button.data("whatever");
+        var modal = $(this);
+        modal.find(".modal-title").text(recipient);
+        var nickname = $('#nickname').html();
+        //document.getElementById("userName").value;
+        var email = $('#email').html();
+
+
+        modal.find(".modal-body input[name='username']").val(nickname);
+        modal.find(".modal-body input[name='email']").val(email);
+
+    });
+
+    function js_method() {
+        var xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                //var dataJson  = eval("("+data+")");
+                var data = xhr.responseText;
+                data = eval("(" + data + ")");
+                console.log(data);
+                var oTest1, newNode1 = "";
+                oTest1 = document.getElementById("tbody");
+                oTest1.innerHTML = '';
+
+                var res = data.code;
+                for (var i = 0; i < data.data.length; i++) {
+                    var proxyip = data.data[i];
+                    var ip = proxyip.split("/")[1].split(":")[0];
+                    var port = proxyip.split("/")[1].split(":")[1];
+                    newNode1 += " <tr> <td>" + i + " </td> <td>" + ip + " </td> <td>" + port + " </td> </tr>"
+
+                }
+
+                oTest1.innerHTML = newNode1;
+
+
+            }
+        };
+
+        xhr.open('GET', 'proxyIpApi/');
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send();
+    }
+
+    //
+
+    function crawler() {
+        var url = document.getElementById("url").value;
+        var format = document.getElementById("format").value;
+        console.log(url+"*"+format);
+        var parm = "url=" + url+"&&format="+format;
+        var xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                //var dataJson  = eval("("+data+")");
+                var data = xhr.responseText;
+                data = eval("(" + data + ")");
+                console.log(data);
+                var oTest1, newNode1 = "";
+                oTest1 = document.getElementById("alert");
+                oTest1.innerHTML = '';
+
+                newNode1 +=" <div class=alert alert-success ><button type=button class=close data-dismiss=alert>清空</button>";
+                for (var i = 0; i < data.data.length; i++) {
+                    var img = data.data[i];
+
+                    newNode1 +="  <strong><img src="+img+"></strong> "
+                }
+                newNode1+="</div>";
+                oTest1.innerHTML = newNode1;
+
+
+            }
+        };
+
+        xhr.open('POST', 'crawler/');
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.send(parm);
+    }
+</script>
 </body>
 
 </html>

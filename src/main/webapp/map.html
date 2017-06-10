@@ -35,22 +35,45 @@
 
 
     // 百度地图API功能
-    var map = new BMap.Map("map", {
+    map = new BMap.Map("map", {
         enableMapClick: false
     }); // 创建Map实例
-    map.centerAndZoom(new BMap.Point(105.403119, 38.028658), 5); // 初始化地图,设置中心点坐标和地图级别
+    map.centerAndZoom(new BMap.Point(105.403110, 38.028658), 5); // 初始化地图,设置中心点坐标和地图级别
     map.enableScrollWheelZoom(true); // 开启鼠标滚轮缩放
 
     map.setMapStyle({
         style: 'midnight'
     });
+    //添加默认比例尺控件
 
     var randomCount = 30;
 
 
 </script>
+<!--<script type="text/javascript">
+    map = new BMap.Map("map");
+    var point = new BMap.Point(108.98048187, 34.21504360); //大唐芙蓉园
+    map.centerAndZoom(point, 15);                           //初始化地图，并且设置中心点坐标，以及地图的级别
+    map.enableScrollWheelZoom();                            //启用滚轮放大缩小地图
+    map.addControl(new BMap.NavigationControl());           //添加默认缩放平移控件
+    map.addControl(new BMap.ScaleControl());                //添加默认比例尺控件
+    var cyIcon = new BMap.Icon("/Images/lineLogo.gif", new BMap.Size(50, 63), {
+        anchor: new BMap.Size(10, 30),
+        infoWindowAnchor: new BMap.Size(25, 0)
+    }); //设置标注图标
+    var marker = new BMap.Marker(point, { icon: cyIcon });  //创建标注
+    map.addOverlay(marker);                                 //将标注添加到地图中
+    var opts = {
+        width: 250,      //宽度
+        height: 100,     //高度
+        title: "大唐芙蓉园"        //信息窗口标题
+    };
+    var infoWindow = new BMap.InfoWindow("accp", opts);      //创建信息窗口对象
+    marker.addEventListener("onclick", function () { this.openInfoWindow(infoWindow) });  //打开信息窗口
+</script>-->
+
 <script language=javascript>
-    var int = self.setInterval("clock()", 1000 * 10)
+    var int = self.setInterval("clock()", 15000 * 1)
     function clock() {
         map.clearOverlays();
     }

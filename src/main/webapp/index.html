@@ -4,9 +4,9 @@
     <title>Ais代理</title>
 </head>
 <!-- Bootstrap核心CSS文件 -->
-<link rel="stylesheet" href="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap.min.css">
+<link rel="stylesheet" href="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap.min.css"/>
 <!-- 可选的Bootstrap主题文件(一般不用引入) -->
-<link rel="stylesheet" href="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap-theme.min.css"/>
 <!-- jQuery文件，在bootstrap.min.js之前引入 -->
 <script src="http://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
 <!-- Bootstrap核心JavaScript文件 -->
@@ -27,16 +27,15 @@
                 oTest1.innerHTML = '';
 
                 var res = data.code;
-                    for(var i = 0 ; i< data.data.length;i++){
-                        var proxyip = data.data[i];
-                        var ip = proxyip.split("/")[1].split(":")[0];
-                        var port = proxyip.split("/")[1].split(":")[1];
-                        newNode1 +=" <tr> <td>"+i+" </td> <td>"+ip+" </td> <td>"+port+" </td> </tr>"
+                for (var i = 0; i < data.data.length; i++) {
+                    var proxyip = data.data[i];
+                    var ip = proxyip.split("/")[1].split(":")[0];
+                    var port = proxyip.split("/")[1].split(":")[1];
+                    newNode1 += " <tr> <td>" + i + " </td> <td>" + ip + " </td> <td>" + port + " </td> </tr>"
 
-                    }
+                }
 
-                    oTest1.innerHTML = newNode1;
-
+                oTest1.innerHTML = newNode1;
 
 
             }
@@ -65,14 +64,14 @@
                     oTest1.innerHTML = '';
 
                     newNode1 += " <a class='btn btn-warning btn-large btn-block' href='https://github.com/login/oauth/authorize?client_id=75e7694cd70a8fe807a9&state=xxx&redirect_uri=http://127.0.0.1:8080/RegisteredByGithub'>Github登陆获取稳定api</a>"
-                            oTest1.innerHTML = newNode1;
+                    oTest1.innerHTML = newNode1;
                 }
                 else {
                     var oTest1, newNode1 = "";
                     oTest1 = document.getElementById("github");
                     oTest1.innerHTML = null;
 
-                    newNode1 += " <button class='btn btn-large btn-warning btn-block disabled' type='button' href=''>欢迎,"+data.data.login+"</button>"
+                    newNode1 += " <button class='btn btn-large btn-warning btn-block disabled' type='button' href=''>欢迎," + data.data.login + "</button>"
                     oTest1.innerHTML = newNode1;
 
                 }
@@ -84,6 +83,80 @@
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send();
     }
+
+    function manager() {
+
+
+        var params = "userName=" + document.getElementById("userName").value
+                + "&passWord=" + document.getElementById("passWord").value;
+
+        // var commentValue = JSON.stringify(strJSON);
+
+        var xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                //var dataJson  = eval("("+data+")");
+                var data = xhr.responseText;
+                data = eval("(" + data + ")");
+                //console.log(data);
+                var res = data.code;
+                if (res == 1) {
+                    window.location = "manager.html";
+                    return;
+                }
+                else if (res == 0) {
+                    alert(data.msg);
+                    return;
+                }
+                else {
+                    var oTest1, newNode1 = "";
+                    oTest1 = document.getElementById("login");
+                    oTest1.innerHTML = null;
+
+                    newNode1 += " <div class='modal-body'> <span class='input-group-addon'>UserName</span> <input id='userName' type='text' class='form-control' placeholder=''> </div> <div class='modal-body'> <span class='input-group-addon'>PassWord</span> <input id='passWord' type='password' class='form-control' placeholder=''> </div> <div class='modal-footer'> <button type='button' class='btn btn-default' data-dismiss='modal'>Close</button> <button type='button' onclick='manager()' class='btn btn-primary'>submit</button> </div>"
+                    oTest1.innerHTML = newNode1;
+
+                }
+
+            }
+        };
+
+        xhr.open('POST', 'manager/');
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        //xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send(params);
+    }
+
+    function loginmanager() {
+
+        // var commentValue = JSON.stringify(strJSON);
+
+        var xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                //var dataJson  = eval("("+data+")");
+                var data = xhr.responseText;
+                data = eval("(" + data + ")");
+                //console.log(data);
+                var res = data.code;
+                //alert(res);
+                if (res == 1) {
+                    //alert(res);
+                    window.location = "manager.html";
+
+                }
+            }
+        };
+
+        xhr.open('POST', 'managerlogin/');
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        //xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send();
+    }
+
+
 </script>
 <div class="container-fluid">
     <div class="row-fluid">
@@ -97,6 +170,14 @@
                                         <a href="JavaScript:js_method();">Api</a> <span class="divider"></span>
                     -->
                     <a href="api.html">Api</a> <span class="divider"></span>
+                </li>
+                <li class="active">
+
+                    <a type="button" onclick="loginmanager()" data-toggle="modal" data-target="#myModal">后台管理</a> <span
+                        class="divider"></span>
+                </li>
+                <li>
+                    <a href="allproxyip.html">代理管理</a> <span class="divider"></span>
                 </li>
                 <li class="active">
 
@@ -114,7 +195,7 @@
             <div id="github"></div>
             <blockquote>
 
-                <small> <cite> 免费代理ip,每30分钟更新一次</cite></small>
+                <small><cite> 免费代理ip,每30分钟更新一次</cite></small>
             </blockquote>
             <table class="table table-bordered">
                 <thead>
@@ -133,8 +214,6 @@
                 <tbody id="tbody">
 
 
-
-
                 </tbody>
             </table>
             <h3 class="text-center text-success">
@@ -151,6 +230,40 @@
     </div>
 </div>
 
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+
+            </div>
+            <div id="login">
+                <div class="text-center">
+                    <h1>
+                        后台管理员登录
+                    </h1>
+
+
+                </div>
+                <div class="modal-body">
+                    <span class="input-group-addon">UserName</span>
+                    <input id="userName" type="text" class="form-control" placeholder="">
+                </div>
+                <div class="modal-body">
+                    <span class="input-group-addon">PassWord</span>
+                    <input id="passWord" type="password" class="form-control" placeholder="">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" onclick="manager()" class="btn btn-primary">submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 
 </html>

@@ -1,21 +1,24 @@
 package com.mywebapp.apicontroller;
 
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * Created by gaorui on 17/1/11.
  */
-@RestController
+@Controller
 public class MyController {
 
-    @RequestMapping(value = "/my/{username}", method = RequestMethod.GET)
-    public String getUser(@PathVariable String username) {
+    @RequestMapping(value = "/welcome")
+    public void welcome(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-
-        return "my," + username;
+        System.out.println("welcome");
+        request.getRequestDispatcher("WEB-INF/page/index.html").forward(request,response);
+        //return  null;
     }
 
 

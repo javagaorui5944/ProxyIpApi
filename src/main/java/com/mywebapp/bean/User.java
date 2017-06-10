@@ -8,6 +8,24 @@ import java.util.Date;
 public class User {
     private int id;
     private String u_name;
+    private int u_status;
+    private int u_count;
+
+    public int getU_status() {
+        return u_status;
+    }
+
+    public void setU_status(int u_status) {
+        this.u_status = u_status;
+    }
+
+    public int getU_count() {
+        return u_count;
+    }
+
+    public void setU_count(int u_count) {
+        this.u_count = u_count;
+    }
 
     public String getU_created_at() {
         return u_created_at;
